@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+import OrbitControls from 'three-orbitcontrols'
 
 export default (e:HTMLElement)=>{
     const scene = new THREE.Scene()
@@ -38,4 +39,7 @@ export default (e:HTMLElement)=>{
         mesh.rotateY(0.001*t);//旋转角速度0.001弧度每毫秒
     }
     render();
+
+    const controls = new OrbitControls(camera,renderer.domElement)
+    controls.addEventListener('change', render);
 }

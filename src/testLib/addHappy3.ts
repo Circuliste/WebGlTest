@@ -29,11 +29,32 @@ export default (e:HTMLElement)=>{
     e.appendChild(renderer.domElement)
     renderer.render(scene,camera)
 
+    let T0 = new Date().getTime();//上次时间
     function render() {
+
+        let T1 = new Date().getTime();//本次时间
+        let t = T1-T0;//时间差
+        T0 = T1;//把本次时间赋值给上次时间
+        requestAnimationFrame(render);
         renderer.render(scene,camera);//执行渲染操作
-      }
-      render();
-      const controls = new OrbitControls(camera,renderer.domElement);//创建控件对象
-      controls.addEventListener('change', render);//监听鼠标、键盘事件
+        mesh.rotateY(0.001*t);//旋转角速度0.001弧度每毫秒
+    }
     render();
+
+    const controls = new OrbitControls(camera,renderer.domElement)
+    controls.addEventListener('change', render);
+
+    const geometry1 = new THREE.BoxGeometry(100, 100, 100)
+    const material1 = new THREE.MeshPhongMaterial({
+        color:0x0000ff,
+        specular:0x4488ee,
+        shininess:12
+    })
+    const mesh1 = new THREE.Mesh(geometry1, material1)
+    mesh1.translateY(120)
+    scene.add(mesh1);
+
+    const axisHelper = new THREE.AxesHelper(250);
+    scene.add(axisHelper);
+
 }
